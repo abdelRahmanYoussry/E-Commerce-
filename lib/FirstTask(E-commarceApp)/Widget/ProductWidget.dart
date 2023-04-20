@@ -1,8 +1,9 @@
+import 'package:ecommarce/FirstTask(E-commarceApp)/Shared/Componets/Unlity.dart';
 import 'package:flutter/material.dart';
-import 'package:taskawy/SecondTask(ToDoApp)/Shared/Componets/Componets.dart';
 
-import '../Presentation/TaskDetails.dart';
+import '../Presentation/ProductDetails.dart';
 import '../Shared/AppCubit/app_cubit.dart';
+import '../Shared/Componets/Componets.dart';
 
 class TasksWidget extends StatelessWidget {
   String taskName;
@@ -43,45 +44,98 @@ class TasksWidget extends StatelessWidget {
     var mediaQuery = MediaQuery.of(context).size;
     return InkWell(
       child: Container(
-        width: double.infinity,
-        height: height,
+        height: 400,
         padding: const EdgeInsets.only(left: 5.0, right: 5, top: 5),
         decoration: BoxDecoration(
             color: taskColor, borderRadius: BorderRadius.circular(20)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              width: mediaQuery.width,
+              height: mediaQuery.height / 5.5,
+              child: Center(
+                child: Column(
+                  children: [
+                    Utility.imageFromBase64String(model['image']),
+                    // Container(
+                    //   width: 200,
+                    //   height: 100,
+                    //   decoration: BoxDecoration(
+                    //       image: DecorationImage(
+                    //           image:
+                    //               AssetImage('assets/image/delivery 3.png'))),
+                    // ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      model['title'],
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Text(
+                          model['description'],
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              overflow: TextOverflow.ellipsis),
+                          maxLines: 2,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
               child: Row(
                 children: [
                   Text(
-                    model['endTime'],
+                    model['price'].toString() + r'$',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 20,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
                   const Spacer(),
-                  Text(
-                    model['endDate'],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
+                  Container(
+                    width: 80,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Center(
+                      child: Text(
+                        model['discount'] + '%' + 'off',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            // const SizedBox(height: 5,),
-            //Row for CheckBox and Title
+            SizedBox(
+              height: 5,
+            ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 if (changeStatus == true)
                   Transform.scale(
-                    scale: 2,
+                    scale: 1.5,
                     child: Checkbox(
                         fillColor: MaterialStateProperty.resolveWith(
                             (states) => checkBoxFillColor),
@@ -94,185 +148,79 @@ class TasksWidget extends StatelessWidget {
                         value: isChecked,
                         onChanged: (value) {
                           onChanged(value);
+                          if (value == true) {
+                            showToast(
+                                text: 'Item add to Cart',
+                                state: ToastState.Success);
+                          } else {
+                            showToast(
+                                text: 'Item removed from Cart',
+                                state: ToastState.Success);
+                          }
                         }),
                   ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Expanded(
-                    child: showBody == true
-                        ? Center(
-                            child: Text(
-                              model['title'],
-                              style: TextStyle(
-                                  color: taskTitleColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  overflow: TextOverflow.ellipsis),
-                              maxLines: 1,
-                            ),
-                          )
-                        : Text(
-                            model['title'],
-                            style: TextStyle(
-                                color: taskTitleColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                overflow: TextOverflow.ellipsis),
-                            maxLines: 2,
-                          )),
-                // const Spacer(),
-                if (changeStatus == true)
-                  PopupMenuButton(
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                          value: MenuItem.item1,
-                          child: Container(
-                            width: double.infinity,
-                            height: mediaQuery.height / 20,
-                            decoration: BoxDecoration(
-                                color: Colors.amber,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Center(
-                              child: Text(
-                                'Favourite',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          )),
-                      PopupMenuItem(
-                          value: MenuItem.item2,
-                          child: Container(
-                            width: double.infinity,
-                            height: mediaQuery.height / 20,
-                            decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Center(
-                              child: Text(
-                                'Complete',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          )),
-                      PopupMenuItem(
-                          value: MenuItem.item3,
-                          child: Container(
-                            width: double.infinity,
-                            height: mediaQuery.height / 20,
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Center(
-                              child: Text(
-                                'Uncomplete',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          )),
-                      PopupMenuItem(
-                          value: MenuItem.item4,
-                          child: Container(
-                            width: double.infinity,
-                            height: mediaQuery.height / 20,
-                            decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .color!,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Center(
-                              child: Text(
-                                'Delete',
-                                style: TextStyle(
-                                    color: Theme.of(context).backgroundColor),
-                              ),
-                            ),
-                          )),
-                    ],
-                    onSelected: (value) {
-                      if (value == MenuItem.item1) {
-                        // debugPrint(MenuItem.item1.toString());
-                        AppCubit.get(context)
-                            .changeStatus(status: 'favourite', id: model['id']);
-                      } else if (value == MenuItem.item4) {
-                        AppCubit.get(context).deleteData(id: model['id']);
-                      } else if (value == MenuItem.item2) {
-                        // taskColor=Colors.green;
-                        // taskTitleColor=Colors.white;
-                        AppCubit.get(context)
-                            .changeStatus(status: 'complete', id: model['id']);
-                      } else if (value == MenuItem.item3) {
-                        // taskColor=Colors.brown;
-                        // taskTitleColor=Colors.white;
-                        AppCubit.get(context).changeStatus(
-                            status: 'unComplete', id: model['id']);
-                      }
+                Spacer(),
+                InkWell(
+                    onTap: () {
+                      AppCubit.get(context).deleteData(id: model['id']);
                     },
-                    color: popUpMenuColor,
-                    child: Icon(color: Colors.white, Icons.menu),
-                  ),
+                    child: Icon(Icons.delete))
               ],
             ),
-            //body Of the Task
-            if (showBody == true)
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Text(
-                    model['body'],
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        overflow: TextOverflow.ellipsis),
-                    maxLines: 3,
-                  ),
-                ),
-              ),
-            Expanded(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  isFavourite == true
-                      ? IconButton(
-                          onPressed: () {
-                            AppCubit.get(context).changeStatus(
-                                status: 'unComplete', id: model['id']);
-                          },
-                          icon: Icon(
-                            Icons.star_rate_sharp,
-                            color: Colors.amber,
-                            size: 30,
-                          ))
-                      : IconButton(
-                          onPressed: () {
-                            AppCubit.get(context)
-                                .changeStatus(status: 'favourite', id: model['id']);
-                          },
-                          icon: Icon(
-                            Icons.star_rate_outlined,
-                            color: Colors.amber,
-                            size: 30,
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                isFavourite == true
+                    ? IconButton(
+                        onPressed: () {
+                          AppCubit.get(context)
+                              .changeStatus(status: 'all', id: model['id']);
+                          showToast(
+                              text: 'Item removed from Favourite',
+                              state: ToastState.Success);
+                        },
+                        icon: Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                          size: 30,
+                        ))
+                    : IconButton(
+                        onPressed: () {
+                          AppCubit.get(context).changeStatus(
+                              status: 'favourite', id: model['id']);
+                        },
+                        icon: Icon(
+                          Icons.favorite_border,
+                          color: Colors.redAccent,
+                          size: 30,
+                        )),
+                Spacer(),
+                // SizedBox.expand(),
+                InkWell(
+                    onTap: () {
+                      navigateTo(context,
+                          widget: TaskDetailsScreen(
+                            detailsModel: model,
+                            taskColor: taskColor,
+                          ));
+                    },
+                    child: model['status'] == 'unComplete'
+                        ? Text(
+                            'buy Again',
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          )
+                        : Text(
+                            'buy Now',
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           )),
-                     Spacer(),
-                     // SizedBox.expand(),
-                  IconButton(
-                    padding: EdgeInsets.only(left: 20),
-                      onPressed: () {
-                        navigateTo(context,
-                            widget: TaskDetailsScreen(
-                              detailsModel: model,
-                              taskColor: taskColor,
-                            ));
-                      },
-                      icon: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: Colors.white,
-                      ))
-                ],
-              ),
+                SizedBox(
+                  width: 5,
+                ),
+              ],
             )
           ],
         ),

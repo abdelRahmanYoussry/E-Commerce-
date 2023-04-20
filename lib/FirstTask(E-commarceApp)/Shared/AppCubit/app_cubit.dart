@@ -1,45 +1,47 @@
-import 'package:bloc/bloc.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../Componets/Unlity.dart';
 import '../Local/cash_helper.dart';
 
 part 'app_state.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitial());
-  static AppCubit get(context)=>BlocProvider.of(context);
+  static AppCubit get(context) => BlocProvider.of(context);
   late Database database;
-   int ?taskId;
-  bool isChecked=false;
-  int ?differenceDaysMinutes;
-  int ?differenceDaysSeconds;
-  List<Map> allTasks = [];
-  List<Map> completeTasks = [];
-  List<Map> unCompleteTasks = [];
-  List<Map> favouriteTasks = [];
-  List<Map> scheduleTasks = [];
+  int? productId;
+  bool isChecked = false;
+  int? differenceDaysMinutes;
+  int? differenceDaysSeconds;
+  List<Map> allProuduct = [];
+  List<Map> completeProuduct = [];
+  List<Map> unCompleteProuduct = [];
+  List<Map> favouriteProuduct = [];
+  List<Map> scheduleProuduct = [];
 
-
-  void changeCheckBox(bool checked){
-    isChecked= checked;
+  void changeCheckBox(bool checked) {
+    isChecked = checked;
     emit(ChangeCheckBox());
   }
 
-
-  void createDataBase()  {
+  void createDataBase() {
     openDatabase(
-      'tasksAway.db',
-      version: 1,
+      'CommerceNew.db',
+      version: 4,
       onCreate: (database, version) {
         debugPrint("database has created");
+        //CREATE TABLE CommerceNew (id INTEGER PRIMARY KEY,title TEXT,endDate TEXT,endTime TEXT,status TEXT,startTime TEXT,reminder TEXT,body TEXT,'
+        //   //               'remainingMinutes INTEGER,remainingHours INTEGER,remainingDays INTEGER,startDate Text)')
         database
             .execute(
-            'CREATE TABLE Taskawy (id INTEGER PRIMARY KEY,title TEXT,endDate TEXT,endTime TEXT,status TEXT,startTime TEXT,reminder TEXT,body TEXT,'
-                'remainingMinutes INTEGER,remainingHours INTEGER,remainingDays INTEGER,startDate Text)')
+                'CREATE TABLE CommerceNew (id INTEGER PRIMARY KEY,title TEXT,status TEXT,description TEXT,'
+                'price INTEGER,discount Text,quantity INTEGER,startDate Text,image Text)')
             .then((value) {
           debugPrint("Table has created");
         }).catchError((error) {
@@ -51,90 +53,72 @@ class AppCubit extends Cubit<AppState> {
         debugPrint("database has opened");
       },
     ).then((value) {
-      database=value;
+      database = value;
       emit(CreateDataBase());
     });
   }
 
- Future<int>  daysBetween(DateTime from, DateTime to)async {
-    from = DateTime(from.year, from.month, from.day);
-    to = DateTime(to.year, to.month, to.day);
-    int resultInMinutes;
-    int resultInSecond;
-      resultInMinutes=( to.difference(from).inHours / 24).round();
-      resultInSecond=( to.difference(from).inSeconds).round();
-      differenceDaysMinutes=resultInMinutes;
-      differenceDaysSeconds=resultInSecond;
-    debugPrint('${differenceDaysMinutes} Dayessssssssssssssssssss in minutes');
-    debugPrint('${differenceDaysSeconds} Dayessssssssssssssssssss in Seconds');
-    return resultInMinutes;
-  }
-
-
-  Future<int>  hoursBetween(DateTime from, DateTime to)async {
-    from = DateTime(from.hour, from.minute,);
-    to = DateTime(to.hour, to.minute,);
-    int result;
-    result=( to.difference(from).inMinutes).round();
-    debugPrint('${result} Hoursssssssssssssss');
-    return result;
-  }
-
-  // String intToTimeLeft(int value) {
-  //   int h, m, s;
+  // Future<int> daysBetween(DateTime from, DateTime to) async {
+  //   from = DateTime(from.year, from.month, from.day);
+  //   to = DateTime(to.year, to.month, to.day);
+  //   int resultInMinutes;
+  //   int resultInSecond;
+  //   resultInMinutes = (to.difference(from).inHours / 24).round();
+  //   resultInSecond = (to.difference(from).inSeconds).round();
+  //   differenceDaysMinutes = resultInMinutes;
+  //   differenceDaysSeconds = resultInSecond;
+  //   debugPrint('${differenceDaysMinutes} Dayessssssssssssssssssss in minutes');
+  //   debugPrint('${differenceDaysSeconds} Dayessssssssssssssssssss in Seconds');
+  //   return resultInMinutes;
+  // }
   //
-  //   h = value ~/ 60;
-  //
-  //   m = ((value - h * 60)) ~/ 2;
-  //
-  //   s = value - (h * 60) - (m * 1);
-  //
-  //   String hourLeft = h.toString().length < 2 ? "0" + h.toString() : h.toString();
-  //
-  //   String minuteLeft =
-  //   m.toString().length < 2 ? "0" + m.toString() : m.toString();
-  //
-  //   String secondsLeft =
-  //   s.toString().length < 2 ? "0" + s.toString() : s.toString();
-  //
-  //   String result = "$hourLeft:$minuteLeft:$secondsLeft";
-  //    print(result+' intToTimeLeft');
+  // Future<int> hoursBetween(DateTime from, DateTime to) async {
+  //   from = DateTime(
+  //     from.hour,
+  //     from.minute,
+  //   );
+  //   to = DateTime(
+  //     to.hour,
+  //     to.minute,
+  //   );
+  //   int result;
+  //   result = (to.difference(from).inMinutes).round();
+  //   debugPrint('${result} Hoursssssssssssssss');
   //   return result;
   // }
+  //
+  // String differenceFormattedString(int minute) {
+  //   try {
+  //     DateTime now = DateTime.now();
+  //     Duration difference = Duration(minutes: minute);
+  //     final today =
+  //         DateTime(now.year).add(difference).subtract(const Duration(days: 1));
+  //     var result = '${today.day} Days ${today.hour} Hours ${today.minute} Min';
+  //     debugPrint(result);
+  //     return '${today.day} Days ${today.hour} Hours ${today.minute} Min';
+  //   } catch (e) {
+  //     return '';
+  //   }
+  // }
 
-  String differenceFormattedString(int minute) {
-    try {
-      DateTime now = DateTime.now();
-      Duration difference = Duration(minutes: minute);
-      final today = DateTime(now.year).add(difference).subtract(const Duration(days: 1));
-     var result='${today.day} Days ${today.hour} Hours ${today.minute} Min';
-      debugPrint(result);
-      return '${today.day} Days ${today.hour} Hours ${today.minute} Min';
-    } catch (e) {
-      return '';
-    }
-  }
-
-  insertToDataBase(
-      {required String title,
-        required String endDate,
-        required String StartDate,
-        required String endTime,
-        required String startTime,
-        required String reminder,
-        required String body,
-        required int remainingMinutes ,
-        required int remainingHours ,
-        required int remainingDays ,
-      }) async {
+  insertToDataBase({
+    required String title,
+    required String StartDate,
+    required String description,
+    required String image,
+    required int price,
+    required String discount,
+    required int quantity,
+  }) async {
     await database.transaction((txn) {
-      return txn.rawInsert(
-          'INSERT INTO Taskawy(title, endDate, endTime, status, startTime, reminder, body, remainingMinutes , remainingHours , remainingDays , startDate ) '
-              'VALUES( "$title", "$endDate", "$endTime", "all", "$startTime", "$reminder", "$body" , "$remainingMinutes" , "$remainingHours" , "$remainingDays" , "$StartDate")')
+      return txn
+          .rawInsert(
+              'INSERT INTO CommerceNew(title , status , description , price , discount , quantity , startDate, image ) '
+              'VALUES( "$title", "all", "$description" , "$price" , "$discount" , "$quantity" , "$StartDate" , "$image")')
           .then((value) async {
         debugPrint("$value inserted successfully");
         // debugPrint("$value [id]");
-      await  getDataFromDataBase(database);
+        await getDataFromDataBase(database);
 
         emit(InsertToDataBase());
       }).catchError((onError) {
@@ -143,125 +127,169 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
- Future <void> getDataFromDataBase (dataBase)
-  async {
-    allTasks=[];
-    completeTasks=[];
-    favouriteTasks=[];
-    unCompleteTasks=[];
-    dataBase.rawQuery('SELECT * FROM Taskawy').then((value) {
+  Future<void> getDataFromDataBase(dataBase) async {
+    allProuduct = [];
+    completeProuduct = [];
+    favouriteProuduct = [];
+    unCompleteProuduct = [];
+    dataBase.rawQuery('SELECT * FROM CommerceNew').then((value) {
       value.forEach((element) async {
-        // debugPrint(element['status']);
-        allTasks.add(element);
+        debugPrint(element['status'] + '======>status');
+        allProuduct.add(element);
         // debugPrint('${element['id']}   this is Id');
-        taskId=element['id'];
-        debugPrint('$taskId   this is taskId');
-        debugPrint('${element['title']}   this is title');
-         if(element['status']=='complete') {
-          completeTasks.add(element);
+        productId = element['id'];
+        debugPrint('$productId   this is productId');
+        // debugPrint('${element['title']}   this is title');
+        if (element['status'] == 'complete') {
+          completeProuduct.add(element);
+        } else if (element['status'] == 'unComplete') {
+          unCompleteProuduct.add(element);
+        } else if (element['status'] == 'favourite') {
+          favouriteProuduct.add(element);
+        } else if (element['status'] == 'all') {
+          if (allProuduct.contains(element['id'])) {
+            allProuduct.add(element);
+          }
         }
-        else if(element['status']=='unComplete'){
-          unCompleteTasks.add(element);
-        }
-        else if(element['status']=='favourite'){
-          favouriteTasks.add(element);
-        }
-         else if(element['status']=='all'){
-           unCompleteTasks.add(element);
-         }
         // debugPrint(element['status']);
       });
       emit(GetFromDataBase());
     });
   }
 
-  void getDateToScheduleTable (dataBase,{required String date})
-  {
-   scheduleTasks.clear();
-    dataBase.rawQuery('SELECT * FROM Taskawy WHERE endDate = ?', [date]).then((value) {
+  void getDateToScheduleTable(dataBase, {required String date}) {
+    scheduleProuduct.clear();
+    dataBase.rawQuery(
+        'SELECT * FROM CommerceNew WHERE startDate = ?', [date]).then((value) {
       value.forEach((element) {
         // debugPrint(element['date']+'abbbbbbbbbbbbbbbbbbbbb');
-        if(element['endDate']==date){
-        scheduleTasks.add(element);
-        // debugPrint(element['schedule table']);
-
-      }
+        if (element['startDate'] == date) {
+          scheduleProuduct.add(element);
+          // debugPrint(element['schedule table']);
+        }
       });
 
       emit(GetFromScheduleTable());
     });
   }
 
-  void changeStatus({required String status,required int id})
-  {
-    database.rawUpdate(
-        'UPDATE Taskawy SET status = ? WHERE id = ?',
-        [status, id]
-    ).then((value) {
+  void changeStatus({required String status, required int id}) {
+    database.rawUpdate('UPDATE CommerceNew SET status = ? WHERE id = ?',
+        [status, id]).then((value) {
       debugPrint(value.toString());
       getDataFromDataBase(database);
       // getDateToScheduleTable(database, date: DateFormat.yMMMd().format(DateTime.now()));
       emit(ChangeStatus());
-
-
     });
   }
 
- Future<void>  updateData({
+  Future<void> updateData({
     required String title,
-    required String body,
+    required String description,
     required String startTime,
     required String endTime,
     required String reminder,
     required String endDate,
     required String startDate,
     required int id,
-   required int remainingMinutes ,
-   required int remainingHours ,
-   required int remainingDays ,
-
- })
-  async {
-  await  database.rawUpdate(
-        'UPDATE Taskawy SET title = ?, body = ?, startTime = ?, endTime = ?, reminder = ? , endDate = ? , remainingMinutes = ? , remainingHours = ? , remainingDays = ? , startDate = ? WHERE id = ?',
-        [title,body,startTime,endTime,reminder,endDate,remainingMinutes,remainingHours,remainingDays,startDate ,id]
-    ).then((value) async {
+    required int price,
+    required int discount,
+    required int quantity,
+  }) async {
+    await database.rawUpdate(
+        'UPDATE CommerceNew SET title = ?, description = ?, startTime = ?, endTime = ?, reminder = ? , endDate = ? , price = ? , discount = ? , quantity = ? , startDate = ? WHERE id = ?',
+        [
+          title,
+          description,
+          startTime,
+          endTime,
+          reminder,
+          endDate,
+          price,
+          discount,
+          quantity,
+          startDate,
+          id
+        ]).then((value) async {
       debugPrint(value.toString());
-     await getDataFromDataBase(database);
+      await getDataFromDataBase(database);
       emit(UpdateTask());
-
-
     });
   }
 
-
-  void deleteData({required int id})
-  {
-    database.rawDelete(
-        'DELETE FROM Taskawy WHERE id = ?', [id]).then((value) {
+  void deleteData({required int id}) {
+    database
+        .rawDelete('DELETE FROM CommerceNew WHERE id = ?', [id]).then((value) {
       getDataFromDataBase(database);
       emit(DeleteFromDataBase());
     });
   }
 
-  bool isDark= false;
-  void changeDarkMode({bool? fromShared})
-  {
-    if(fromShared!=null){
-
-      isDark=fromShared;
+  bool isDark = false;
+  void changeDarkMode({bool? fromShared}) {
+    if (fromShared != null) {
+      isDark = fromShared;
 
       emit(ChangeAppMode());
-    }
-    else
-    {
-      isDark=!isDark;
-      CashHelper.putBool(key: 'isDark', value: isDark).
-      then((value) {
+    } else {
+      isDark = !isDark;
+      CashHelper.putBool(key: 'isDark', value: isDark).then((value) {
         debugPrint(isDark.toString());
         emit(ChangeAppMode());
-      });}
-
+      });
+    }
   }
 
+  File? productImageFile;
+  var picker = ImagePicker();
+  String? imgString;
+  // pickImageFromGallery() {
+  //   ImagePicker().pickImage(source: ImageSource.gallery).then((imgFile) async {
+  //     String imgString = Utility.base64String(await imgFile!.readAsBytes());
+  //     print(imgString);
+  //     photo photo1 = photo(0, imgString);
+  //     cash.save(photo1);
+  //     refreshImages();
+  //   });
+  // }
+  Future pickAProfileImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      productImageFile = File(pickedFile.path);
+      imgString = Utility.base64String(await productImageFile!.readAsBytes());
+      print(pickedFile.path.toString());
+      emit(PickImageSuccessState());
+    } else {
+      print('No Image Selected');
+      emit(PickImageErrorState());
+    }
+  }
+
+  void sortItem({required String value}) {
+    switch (value) {
+      case 'MenuItem.item2':
+        allProuduct.sort(
+            (a, b) => a['title'].toString().compareTo(b['title'].toString()));
+        allProuduct.forEach((element) {
+          print(element['title']);
+        });
+        break;
+      case 'MenuItem.item1':
+        allProuduct.sort(
+            (a, b) => a['price'].toString().compareTo(b['price'].toString()));
+        allProuduct.forEach((element) {
+          print(element['price']);
+        });
+        break;
+      case 'MenuItem.item3':
+        allProuduct.sort((a, b) =>
+            a['startDate'].toString().compareTo(b['startDate'].toString()));
+        allProuduct.forEach((element) {
+          print(element['startDate']);
+        });
+        break;
+    }
+
+    emit(SortSuccessState());
+  }
 }

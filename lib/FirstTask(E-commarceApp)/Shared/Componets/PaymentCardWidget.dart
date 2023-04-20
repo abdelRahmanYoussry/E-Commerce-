@@ -1,11 +1,8 @@
 // ignore_for_file: file_names, constant_identifier_names
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:hassy/core/utils/shared/app/assets_manager.dart';
-import 'package:hassy/core/utils/shared/translations/locale_keys.g.dart';
 
-import '../../../../core/utils/shared/app/color_manager.dart';
+import '../../Style/assets_manager.dart';
 
 class PaymentCard {
   LocalCardType? type;
@@ -39,7 +36,7 @@ enum LocalCardType {
 class CardUtils {
   static String? validateCVV(String? value) {
     if (value == null || value.isEmpty) {
-      return LocaleKeys.fieldReq.tr();
+      return ' Cvv ';
     }
 
     if (value.length < 3 || value.length > 4) {
@@ -50,14 +47,14 @@ class CardUtils {
 
   static String? validateDate(String? value) {
     if (value == null || value.isEmpty) {
-      return LocaleKeys.fieldReq.tr();
+      // return LocaleKeys.fieldReq.tr();
     }
 
     int year;
     int month;
     // The value contains a forward slash if the month and year has been
     // entered.
-    if (value.contains(RegExp(r'(/)'))) {
+    if (value!.contains(RegExp(r'(/)'))) {
       var split = value.split(RegExp(r'(/)'));
       // The value before the slash is the month while the value to right of
       // it is the year.
@@ -164,7 +161,7 @@ class CardUtils {
         icon = Icon(
           Icons.credit_card,
           size: 40.0,
-          color: ColorManager.mainPrimaryColor4,
+          color: Colors.grey,
         );
         break;
       default:
@@ -189,13 +186,13 @@ class CardUtils {
 
   static String? validateCardNum(String? input) {
     if (input == null || input.isEmpty) {
-      return LocaleKeys.fieldReq.tr();
+      return 'Card Num';
     }
 
     input = getCleanedNumber(input);
 
     if (input.length < 8) {
-      return LocaleKeys.numberIsInvalid.tr();
+      return 'Card Num must be 8 digits';
     }
 
     int sum = 0;
@@ -215,7 +212,7 @@ class CardUtils {
       return null;
     }
 
-    return LocaleKeys.numberIsInvalid.tr();
+    return 'numberIsInvalid';
   }
 
   static LocalCardType getCardTypeFrmNumber(String input) {

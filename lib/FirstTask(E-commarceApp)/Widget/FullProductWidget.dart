@@ -5,10 +5,9 @@ import '../Presentation/AddProduct.dart';
 import '../Shared/AppCubit/app_cubit.dart';
 import '../Shared/Componets/Componets.dart';
 import '../Shared/Componets/ElevatedButton.dart';
-import 'Divider.dart';
 import 'ProductWidget.dart';
 
-class MyTaskFullWidget extends StatelessWidget {
+class MyProductFullWidget extends StatelessWidget {
   Color taskColor = Colors.red;
   double height;
   double buttonHeight;
@@ -19,7 +18,7 @@ class MyTaskFullWidget extends StatelessWidget {
   bool showBody;
   bool isFavourite = false;
 
-  MyTaskFullWidget({
+  MyProductFullWidget({
     Key? key,
     required this.height,
     required this.Taskslist,
@@ -36,25 +35,32 @@ class MyTaskFullWidget extends StatelessWidget {
       children: [
         Expanded(
           child: ConditionalBuilder(
-            builder: (context) => ListView.separated(
+            builder: (context) => GridView.builder(
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
+                itemCount: Taskslist.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 2,
+                    mainAxisExtent: MediaQuery.of(context).size.height / 2.5),
                 itemBuilder: (context, index) {
                   if (Taskslist[index]['status'] == 'complete') {
-                    taskColor = Colors.green;
+                    taskColor = Colors.green.withOpacity(0.8);
                     isFavourite = false;
-                  } else if (Taskslist[index]['status'] == 'unComplete' ||
-                      Taskslist[index]['status'] == 'all') {
-                    taskColor = Colors.red;
+                  } else if (Taskslist[index]['status'] == 'all') {
+                    taskColor = Colors.grey.withOpacity(0.8);
                     isFavourite = false;
+                  } else if (Taskslist[index]['status'] == 'unComplete') {
+                    taskColor = Colors.purple.withOpacity(0.8);
                   } else if (Taskslist[index]['status'] == 'favourite') {
-                    taskColor = Colors.blue;
+                    taskColor = Colors.amber.withOpacity(0.8);
                     // taskColor=taskColor;
                     isFavourite = true;
                   }
                   return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                     child: TasksWidget(
                         model: Taskslist[index],
                         height: height,
@@ -76,16 +82,64 @@ class MyTaskFullWidget extends StatelessWidget {
                                 status: 'complete', id: Taskslist[index]['id']);
                           } else {
                             AppCubit.get(context).changeStatus(
-                                status: 'unComplete',
-                                id: Taskslist[index]['id']);
+                                status: 'all', id: Taskslist[index]['id']);
                           }
                         },
                         checkBoxFillColor: Colors.white,
                         checkColor: Colors.black),
                   );
-                },
-                separatorBuilder: (context, index) => const MyDivider(),
-                itemCount: Taskslist.length),
+                })
+            // ListView.separated(
+            // shrinkWrap: true,
+            // physics: BouncingScrollPhysics(),
+            // itemBuilder: (context, index) {
+            //   if (Taskslist[index]['status'] == 'complete') {
+            //     taskColor = Colors.green;
+            //     isFavourite = false;
+            //   } else if (Taskslist[index]['status'] == 'unComplete' ||
+            //       Taskslist[index]['status'] == 'all') {
+            //     taskColor = Colors.red;
+            //     isFavourite = false;
+            //   } else if (Taskslist[index]['status'] == 'favourite') {
+            //     taskColor = Colors.blue;
+            //     // taskColor=taskColor;
+            //     isFavourite = true;
+            //   }
+            //   return Padding(
+            //     padding: const EdgeInsets.symmetric(
+            //         vertical: 20, horizontal: 10),
+            //     child: TasksWidget(
+            //         model: Taskslist[index],
+            //         height: height,
+            //         showBody: showBody,
+            //         isFavourite: isFavourite,
+            //         changeStatus: changeStatus,
+            //         isChecked: Taskslist[index]['status'] == 'complete'
+            //             ? true
+            //             : false,
+            //         popUpMenuColor: Theme.of(context).backgroundColor,
+            //         taskTitleColor: Colors.white,
+            //         checkBorderColor: Colors.white,
+            //         taskName: Taskslist[index]['title'],
+            //         taskColor: taskColor,
+            //         onChanged: (value) {
+            //           isChecked = true;
+            //           if (value == true) {
+            //             AppCubit.get(context).changeStatus(
+            //                 status: 'complete', id: Taskslist[index]['id']);
+            //           } else {
+            //             AppCubit.get(context).changeStatus(
+            //                 status: 'unComplete',
+            //                 id: Taskslist[index]['id']);
+            //           }
+            //         },
+            //         checkBoxFillColor: Colors.white,
+            //         checkColor: Colors.black),
+            //   );
+            // },
+            // separatorBuilder: (context, index) => const MyDivider(),
+            // itemCount: Taskslist.length)
+            ,
             fallback: (context) => Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

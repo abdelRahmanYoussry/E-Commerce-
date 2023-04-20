@@ -2,12 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:taskawy/SecondTask(ToDoApp)/Shared/Componets/Componets.dart';
-import 'package:taskawy/SecondTask(ToDoApp)/Shared/Componets/ElevatedButton.dart';
-import 'package:taskawy/SecondTask(ToDoApp)/Shared/Componets/TextFormField.dart';
 
-import '../Shared/AppCubit/Notifications.dart';
 import '../Shared/AppCubit/app_cubit.dart';
+import '../Shared/Componets/Componets.dart';
+import '../Shared/Componets/ElevatedButton.dart';
+import '../Shared/Componets/TextFormField.dart';
 import '../Widget/DropDownMenu.dart';
 import 'Board.dart';
 
@@ -33,7 +32,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
   var formKey = GlobalKey<FormState>();
 
-  late final LocalNotificationService service;
+  // late final LocalNotificationService service;
 
   Color textColor = Colors.white;
 
@@ -61,16 +60,16 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   bool? isTheSameDay;
   int totalMinutesPerDay = 1440;
   //new
-  int?remainingDaysInEndTime;
-  int?remainingHoursInEndTime;
-  int?remainingMinutesInEndTime;
-  int?remainingSecondsInEndTime;
-  int?remainingDaysInStartTime;
-  int?remainingHoursInStartTime;
-  int?remainingMinutesInStartTime;
-  int?remainingSecondsInStartTime;
-  bool endDateTimeIsOpen=false;
-  bool startDateTimeIsOpen=false;
+  int? remainingDaysInEndTime;
+  int? remainingHoursInEndTime;
+  int? remainingMinutesInEndTime;
+  int? remainingSecondsInEndTime;
+  int? remainingDaysInStartTime;
+  int? remainingHoursInStartTime;
+  int? remainingMinutesInStartTime;
+  int? remainingSecondsInStartTime;
+  bool endDateTimeIsOpen = false;
+  bool startDateTimeIsOpen = false;
   int? finalTotalMinutesInEndTime;
   int? finalTotalMinutesInStartTime;
   int? differentDays;
@@ -82,9 +81,9 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
   @override
   void initState() {
-    service = LocalNotificationService();
-    service.initialize();
-    listenToNotifications();
+    // service = LocalNotificationService();
+    // service.initialize();
+    // listenToNotifications();
     // notifications.intializationNotification();
     super.initState();
     titleController.text = widget.editModel['title'];
@@ -92,7 +91,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     endDateController.text = widget.editModel['endDate'];
     startTimeController.text = widget.editModel['startTime'];
     endTimeController.text = widget.editModel['endTime'];
-    startDateController.text=widget.editModel['startDate'];
+    startDateController.text = widget.editModel['startDate'];
     reminder = widget.editModel['reminder'];
     // var one = format.parse(TimeOfDay.now().format(context));
     // var two = format.parse(endTimeController.text);
@@ -101,29 +100,31 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       // print('$totalMinutes Total miuntes clockTime');
     }
     //different in dateTime
-    finalEndDateTime=DateTime(
+    finalEndDateTime = DateTime(
       formatDate.parse(widget.editModel['endDate']).year,
       formatDate.parse(widget.editModel['endDate']).month,
       formatDate.parse(widget.editModel['endDate']).day,
       format.parse(widget.editModel['endTime']).hour,
       format.parse(widget.editModel['endTime']).minute,
     );
-    finalStartDateTime=DateTime(
+    finalStartDateTime = DateTime(
       formatDate.parse(widget.editModel['startDate']).year,
       formatDate.parse(widget.editModel['startDate']).month,
       formatDate.parse(widget.editModel['startDate']).day,
       format.parse(widget.editModel['startTime']).hour,
       format.parse(widget.editModel['startTime']).minute,
     );
-    remainingMinutesInEndTime= finalEndDateTime!.difference(DateTime.now()).inMinutes;
+    remainingMinutesInEndTime =
+        finalEndDateTime!.difference(DateTime.now()).inMinutes;
     debugPrint(finalStartDateTime.toString());
     debugPrint(finalEndDateTime.toString());
-    remainingDaysInEndTime=finalEndDateTime!.difference(DateTime.now()).inDays;
-    remainingHoursInEndTime= finalEndDateTime!.difference(DateTime.now()).inHours;
+    remainingDaysInEndTime =
+        finalEndDateTime!.difference(DateTime.now()).inDays;
+    remainingHoursInEndTime =
+        finalEndDateTime!.difference(DateTime.now()).inHours;
   }
 
   Widget build(BuildContext context) {
-
     //different in end time clock
 
     // formatDate.parse(widget.editModel['endDate']);
@@ -190,7 +191,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                       },
                       readOnly: false,
                       onSubmit: (value) {
-                        titleController.text=value;
+                        titleController.text = value;
                       },
                       borderColor: Colors.grey[200]!,
                       backgroundColor: Colors.grey[200]!,
@@ -248,18 +249,22 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   'Start Date',
                                   style: TextStyle(
-                                    color: Theme.of(context).textTheme.subtitle1!.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .color,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                width: mediaQuery.width/2.5,
+                                width: mediaQuery.width / 2.5,
                                 child: MyTextFormField(
                                   labelColor: Colors.white,
                                   onChanged: (value) {},
@@ -271,48 +276,62 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                       firstDate: DateTime.now(),
                                       lastDate: DateTime.parse('2100-12-01'),
                                     ).then((value) async {
-                                      setState((){
-                                        startDateTimeIsOpen=true;
+                                      setState(() {
+                                        startDateTimeIsOpen = true;
                                       });
-                                      finalStartDateTime=DateTime(
+                                      finalStartDateTime = DateTime(
                                         value!.year,
                                         value.month,
                                         value.day,
-                                        format.parse(widget.editModel['startTime']).hour,
-                                        format.parse(widget.editModel['startTime']).minute,
+                                        format
+                                            .parse(
+                                                widget.editModel['startTime'])
+                                            .hour,
+                                        format
+                                            .parse(
+                                                widget.editModel['startTime'])
+                                            .minute,
                                       );
-                                      debugPrint(DateFormat.yMMMd().format(DateTime.now()));
+                                      debugPrint(DateFormat.yMMMd()
+                                          .format(DateTime.now()));
                                       // differentTimeDuration= finalDeadlineDateTime!.difference(DateTime.now());
                                       // remainingDaysInEndTime=finalEndDateTime!.difference(DateTime.now()).inDays;
-                                      remainingDaysInStartTime=finalStartDateTime!.difference(DateTime.now()).inDays;
+                                      remainingDaysInStartTime =
+                                          finalStartDateTime!
+                                              .difference(DateTime.now())
+                                              .inDays;
                                       // print(remainingDaysInEndTime.toString()+'remaining days');
-                                      startDateController.text = DateFormat.yMMMd().format(value);
+                                      startDateController.text =
+                                          DateFormat.yMMMd().format(value);
                                       startDateTime = value;
 
-                                      if (DateFormat.yMMMd().format(DateTime.now()) ==startDateController.text ) {
+                                      if (DateFormat.yMMMd()
+                                              .format(DateTime.now()) ==
+                                          startDateController.text) {
                                         // showToast(
                                         //     text:
                                         //         'The task will start in : $remainingDaysInStartTime Days \n       Task will Start Today',
                                         //     state: ToastState.Warning);
-                                        var snackBar=SnackBar(content: Text( 'The task will start in : $remainingDaysInStartTime Days'
-                                            'Task will Start Today'),
+                                        var snackBar = SnackBar(
+                                          content: Text(
+                                              'The task will start in : $remainingDaysInStartTime Days'
+                                              'Task will Start Today'),
                                           backgroundColor: Colors.amber,
-
                                         );
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                                      }
-                                      else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      } else {
                                         // showToast(
                                         //     text: 'The task will start in: $remainingDaysInStartTime Days ',
                                         //     state: ToastState.Success);
-                                        var snackBar=SnackBar(content: Text( 'The task will start in : $remainingDaysInStartTime Days'),
+                                        var snackBar = SnackBar(
+                                          content: Text(
+                                              'The task will start in : $remainingDaysInStartTime Days'),
                                           backgroundColor: Colors.green,
-
                                         );
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
                                       }
-
                                     }).catchError((error) {
                                       FocusScope.of(context).unfocus();
                                     });
@@ -327,11 +346,16 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                   borderColor: Colors.grey[200]!,
                                   backgroundColor: Colors.grey[200]!,
                                   type: TextInputType.text,
-                                  hint: DateFormat.yMMMd().format(DateTime.now()).toString(),
+                                  hint: DateFormat.yMMMd()
+                                      .format(DateTime.now())
+                                      .toString(),
                                   suffix: Icons.calendar_today,
                                   suffixIconColor: Colors.grey[400],
                                   control: startDateController,
-                                  textColor: Theme.of(context).textTheme.subtitle1!.color!,
+                                  textColor: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .color!,
                                   isPassword: false,
                                 ),
                               ),
@@ -343,11 +367,15 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   'End Date',
                                   style: TextStyle(
-                                    color: Theme.of(context).textTheme.subtitle1!.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .color,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -370,21 +398,31 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                       //   isTheSameDay = true;
                                       //   debugPrint(isTheSameDay.toString());
                                       // }
-                                      setState((){
-                                        endDateTimeIsOpen=true;
+                                      setState(() {
+                                        endDateTimeIsOpen = true;
                                       });
-                                      finalEndDateTime=DateTime(
+                                      finalEndDateTime = DateTime(
                                         value!.year,
                                         value.month,
                                         value.day,
-                                        format.parse(widget.editModel['endTime']).hour,
-                                        format.parse(widget.editModel['endTime']).minute,
+                                        format
+                                            .parse(widget.editModel['endTime'])
+                                            .hour,
+                                        format
+                                            .parse(widget.editModel['endTime'])
+                                            .minute,
                                       );
-                                      debugPrint(DateFormat.yMMMd().format(DateTime.now()));
+                                      debugPrint(DateFormat.yMMMd()
+                                          .format(DateTime.now()));
                                       // differentTimeDuration= finalDeadlineDateTime!.difference(DateTime.now());
-                                      remainingDaysInEndTime=finalEndDateTime!.difference(DateTime.now()).inDays;
-                                      debugPrint(remainingDaysInEndTime.toString()+'remaining days');
-                                      endDateController.text = DateFormat.yMMMd().format(value);
+                                      remainingDaysInEndTime = finalEndDateTime!
+                                          .difference(DateTime.now())
+                                          .inDays;
+                                      debugPrint(
+                                          remainingDaysInEndTime.toString() +
+                                              'remaining days');
+                                      endDateController.text =
+                                          DateFormat.yMMMd().format(value);
                                       // await AppCubit.get(context).daysBetween(DateTime.now(), value);
                                       // differentDays = AppCubit.get(context).differenceDaysMinutes;
                                       // print('${differentDays}deadLineeeeeeeeeee');
@@ -393,26 +431,32 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                       // // debugPrint('$finalTotalMinutes  Total Minutes in DeadLine ');
                                       endDateTime = value;
                                       // print(deadlineDateTime!.day);
-                                      if (DateFormat.yMMMd().format(DateTime.now()) ==endDateController.text ) {
+                                      if (DateFormat.yMMMd()
+                                              .format(DateTime.now()) ==
+                                          endDateController.text) {
                                         // showToast(
                                         //     text:
                                         //         'The Remaining Days is : $remainingDaysInEndTime Days \n       Task Must Finish Today',
                                         //     state: ToastState.Warning);
-                                        var snackBar=SnackBar(content: Text( 'The task will End in : $remainingDaysInEndTime Days '
-                                            'it must finish Today'),
+                                        var snackBar = SnackBar(
+                                          content: Text(
+                                              'The task will End in : $remainingDaysInEndTime Days '
+                                              'it must finish Today'),
                                           backgroundColor: Colors.amber,
-
                                         );
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
                                       } else {
                                         // showToast(
                                         //     text: 'The Remaining Days is: $remainingDaysInEndTime Days ',
                                         //     state: ToastState.Success);
-                                        var snackBar=SnackBar(content: Text( 'This task will End in : $remainingDaysInEndTime Days '),
+                                        var snackBar = SnackBar(
+                                          content: Text(
+                                              'This task will End in : $remainingDaysInEndTime Days '),
                                           backgroundColor: Colors.green,
-
                                         );
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
                                       }
                                       // deadlineTime=value;
                                     }).catchError((error) {
@@ -429,11 +473,16 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                   borderColor: Colors.grey[200]!,
                                   backgroundColor: Colors.grey[200]!,
                                   type: TextInputType.text,
-                                  hint: DateFormat.yMMMd().format(DateTime.now()).toString(),
+                                  hint: DateFormat.yMMMd()
+                                      .format(DateTime.now())
+                                      .toString(),
                                   suffix: Icons.calendar_today,
                                   suffixIconColor: Colors.grey[400],
                                   control: endDateController,
-                                  textColor: Theme.of(context).textTheme.subtitle1!.color!,
+                                  textColor: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .color!,
                                   isPassword: false,
                                 ),
                               ),
@@ -442,7 +491,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                         ),
                       ],
                     ),
-
                     const SizedBox(
                       height: 10,
                     ),
@@ -453,12 +501,15 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   'Start Time',
                                   style: TextStyle(
-                                    color:
-                                    Theme.of(context).textTheme.subtitle1!.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .color,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -473,54 +524,100 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                   suffixClicked: () {},
                                   onTap: () {
                                     showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now())
+                                            context: context,
+                                            initialTime: TimeOfDay.now())
                                         .then((value) {
-                                      startTimeController.text = value!.format(context).toString();
-                                      finalStartDateTime=DateTime(
+                                      startTimeController.text =
+                                          value!.format(context).toString();
+                                      finalStartDateTime = DateTime(
                                           startDateTime!.year,
                                           startDateTime!.month,
                                           startDateTime!.day,
                                           value.hour,
-                                          value.minute
-                                      );
-                                      remainingHoursInStartTime=finalStartDateTime!.difference(DateTime.now()).inHours;
-                                      remainingMinutesInStartTime=finalStartDateTime!.difference(DateTime.now()).inMinutes;
-                                      remainingSecondsInStartTime=finalStartDateTime!.difference(DateTime.now()).inSeconds;
-                                      finalTotalMinutesInStartTime=remainingMinutesInStartTime!+(remainingHoursInStartTime!*60)+
-                                          (remainingDaysInStartTime!*totalMinutesPerDay);
-                                      String  timeConvert(int time) {
-                                        remainingStartTimeFormat=((time/24/60 ).toInt().toString()+ "d:"+((time/60%24).toInt().round()).toString()+'h:' +
-                                            (time%60.toInt()).toString()).toString()+' m';
-                                        return ((time/24/60 ).toInt().toString()+ " d: " + ((time/60%24).toInt().round()).toString() + 'h:' +
-                                            (time%60.toInt()).toString()).toString()+'m';
+                                          value.minute);
+                                      remainingHoursInStartTime =
+                                          finalStartDateTime!
+                                              .difference(DateTime.now())
+                                              .inHours;
+                                      remainingMinutesInStartTime =
+                                          finalStartDateTime!
+                                              .difference(DateTime.now())
+                                              .inMinutes;
+                                      remainingSecondsInStartTime =
+                                          finalStartDateTime!
+                                              .difference(DateTime.now())
+                                              .inSeconds;
+                                      finalTotalMinutesInStartTime =
+                                          remainingMinutesInStartTime! +
+                                              (remainingHoursInStartTime! *
+                                                  60) +
+                                              (remainingDaysInStartTime! *
+                                                  totalMinutesPerDay);
+                                      String timeConvert(int time) {
+                                        remainingStartTimeFormat =
+                                            ((time / 24 / 60)
+                                                            .toInt()
+                                                            .toString() +
+                                                        "d:" +
+                                                        ((time / 60 % 24)
+                                                                .toInt()
+                                                                .round())
+                                                            .toString() +
+                                                        'h:' +
+                                                        (time % 60.toInt())
+                                                            .toString())
+                                                    .toString() +
+                                                ' m';
+                                        return ((time / 24 / 60)
+                                                        .toInt()
+                                                        .toString() +
+                                                    " d: " +
+                                                    ((time / 60 % 24)
+                                                            .toInt()
+                                                            .round())
+                                                        .toString() +
+                                                    'h:' +
+                                                    (time % 60.toInt())
+                                                        .toString())
+                                                .toString() +
+                                            'm';
                                       }
-                                      debugPrint(timeConvert(remainingMinutesInStartTime!));
+
+                                      debugPrint(timeConvert(
+                                          remainingMinutesInStartTime!));
 
                                       // print(finalStartDateTime!.isBefore(DateTime.now()));
                                       // debugPrint(value.format(context));
-                                      if(finalStartDateTime!.isBefore(DateTime.now())==true){
-                                        var snackBar=SnackBar(content: Text( 'This task is Already started '),
+                                      if (finalStartDateTime!
+                                              .isBefore(DateTime.now()) ==
+                                          true) {
+                                        var snackBar = SnackBar(
+                                          content: Text(
+                                              'This task is Already started '),
                                           backgroundColor: Colors.amber,
                                         );
 
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                      }
-                                      else  if(!finalStartDateTime!.isBefore(finalEndDateTime!)&&!endTimeController.text.isEmpty){
-                                        var snackBar=SnackBar(content: Text( 'Start time is After End Time'),
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      } else if (!finalStartDateTime!
+                                              .isBefore(finalEndDateTime!) &&
+                                          !endTimeController.text.isEmpty) {
+                                        var snackBar = SnackBar(
+                                          content: Text(
+                                              'Start time is After End Time'),
                                           backgroundColor: Colors.red,
                                         );
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                                      }
-                                      else{
-                                        var snackBar=SnackBar(content: Text( 'This task will start in : $remainingStartTimeFormat '),
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      } else {
+                                        var snackBar = SnackBar(
+                                          content: Text(
+                                              'This task will start in : $remainingStartTimeFormat '),
                                           backgroundColor: Colors.green,
                                         );
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
                                       }
-
                                     }).catchError((error) {
                                       FocusScope.of(context).unfocus();
                                     });
@@ -528,8 +625,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       return "Start Time Can't be Empty";
-                                    }
-                                    else if(finalStartDateTime!.isAfter(finalEndDateTime!)){
+                                    } else if (finalStartDateTime!
+                                        .isAfter(finalEndDateTime!)) {
                                       return 'End Time is before Start time';
                                     }
                                     return null;
@@ -540,9 +637,15 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                   type: TextInputType.text,
                                   hint: '11:00 Am',
                                   suffix: Icons.timer,
-                                  suffixIconColor: Theme.of(context).textTheme.subtitle1!.color!,
+                                  suffixIconColor: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .color!,
                                   control: startTimeController,
-                                  textColor: Theme.of(context).textTheme.subtitle1!.color!,
+                                  textColor: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .color!,
                                   isPassword: false,
                                 ),
                               ),
@@ -554,30 +657,33 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   'End Time',
                                   style: TextStyle(
-                                    color:
-                                    Theme.of(context).textTheme.subtitle1!.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .color,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                width: mediaQuery.width ,
+                                width: mediaQuery.width,
                                 child: MyTextFormField(
                                   labelColor: Colors.white,
                                   onChanged: (value) {},
-                                  enable: endDateTimeIsOpen ,
+                                  enable: endDateTimeIsOpen,
                                   suffixClicked: () {},
                                   onTap: () {
                                     showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.now())
+                                            context: context,
+                                            initialTime: TimeOfDay.now())
                                         .then((value) {
-                                      finalEndDateTime=DateTime(
+                                      finalEndDateTime = DateTime(
                                         endDateTime!.year,
                                         endDateTime!.month,
                                         endDateTime!.day,
@@ -586,26 +692,61 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                       );
                                       // print(finalDeadlineDateTime!.minute.toString()+' final new');
                                       // print(finalDeadlineDateTime!.difference(DateTime.now()).inSeconds.toString()+' final new');
-                                      remainingMinutesInEndTime= finalEndDateTime!.difference(DateTime.now()).inMinutes;
-                                      remainingHoursInEndTime= finalEndDateTime!.difference(DateTime.now()).inHours;
-                                      remainingSecondsInEndTime= finalEndDateTime!.difference(DateTime.now()).inSeconds;
+                                      remainingMinutesInEndTime =
+                                          finalEndDateTime!
+                                              .difference(DateTime.now())
+                                              .inMinutes;
+                                      remainingHoursInEndTime =
+                                          finalEndDateTime!
+                                              .difference(DateTime.now())
+                                              .inHours;
+                                      remainingSecondsInEndTime =
+                                          finalEndDateTime!
+                                              .difference(DateTime.now())
+                                              .inSeconds;
                                       // print(remainingDaysInEndTime.toString()+' days');
                                       // print(remainingMinutesInEndTime.toString()+' minutes');
                                       // print(remainingHoursInEndTime.toString()+' hours');
-                                      endTimeController.text = value.format(context).toString();
+                                      endTimeController.text =
+                                          value.format(context).toString();
 
                                       endTimeHours = value.hour;
                                       endTimeMinutes = value.minute;
                                       // finalTotalMinutesInEndTime = remainingMinutesInEndTime!+(remainingHoursInEndTime!*60)+(remainingDaysInEndTime!*totalMinutesPerDay);
                                       // debugPrint(finalTotalMinutesInEndTime.toString()+' final is final minutes AFter All');
 
-                                      String  timeConvert(int time) {
-                                        remainingEndTimeFormat=((time/24/60 ).toInt().toString()+ "d:"+((time/60%24).toInt().round()).toString()+'h:' +
-                                            (time%60.toInt()).toString()).toString()+' m';
-                                        return ((time/24/60 ).toInt().toString()+ " d: " + ((time/60%24).toInt().round()).toString() + 'h:' +
-                                            (time%60.toInt()).toString()).toString()+'m';
+                                      String timeConvert(int time) {
+                                        remainingEndTimeFormat =
+                                            ((time / 24 / 60)
+                                                            .toInt()
+                                                            .toString() +
+                                                        "d:" +
+                                                        ((time / 60 % 24)
+                                                                .toInt()
+                                                                .round())
+                                                            .toString() +
+                                                        'h:' +
+                                                        (time % 60.toInt())
+                                                            .toString())
+                                                    .toString() +
+                                                ' m';
+                                        return ((time / 24 / 60)
+                                                        .toInt()
+                                                        .toString() +
+                                                    " d: " +
+                                                    ((time / 60 % 24)
+                                                            .toInt()
+                                                            .round())
+                                                        .toString() +
+                                                    'h:' +
+                                                    (time % 60.toInt())
+                                                        .toString())
+                                                .toString() +
+                                            'm';
                                       }
-                                      debugPrint(timeConvert(remainingMinutesInEndTime!));
+
+                                      debugPrint(timeConvert(
+                                          remainingMinutesInEndTime!));
 
                                       // debugPrint(endTimeMinutes.toString()+'this is endTimeMinutes');
                                       // var hn = TimeOfDay.now().hour;
@@ -622,39 +763,45 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
                                       if (remainingDaysInEndTime == 0) {
                                         if (remainingMinutesInEndTime! <= 0) {
-                                          var snackBar=SnackBar(content: Text( 'This task is Already Ended invalid End Time '),
+                                          var snackBar = SnackBar(
+                                            content: Text(
+                                                'This task is Already Ended invalid End Time '),
                                             backgroundColor: Colors.red,
-
                                           );
-                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
                                           // showToast(
                                           //     text:
                                           //         '   ${remainingDaysInEndTime!.toInt()} Days  \n  ${remainingHoursInEndTime!.toInt()} Hours \n'
                                           //         ' Invalid Time',
                                           //     state: ToastState.Error);
-                                        }
-                                        else {
+                                        } else {
                                           // showToast(
                                           //     text: '${remainingDaysInEndTime!.round()} Days '
                                           //         ' \n  ${remainingHoursInEndTime!.toInt()} Hours \n'
                                           //         ' $remainingMinutesInEndTime Total Minutes To Finish The Task ',
                                           //     state: ToastState.Success);
-                                          var snackBar=SnackBar(content: Text( 'The task will End in : $remainingEndTimeFormat  '),
+                                          var snackBar = SnackBar(
+                                            content: Text(
+                                                'The task will End in : $remainingEndTimeFormat  '),
                                             backgroundColor: Colors.green,
-
                                           );
-                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
                                         }
-                                      }
-                                      else {
+                                      } else {
                                         // showToast(
                                         //     text:
                                         //         '${differentDays!.round()} Days \n ${differentHours!.toInt().round()} Hours \n'
                                         //         '$finalTotalMinutes Total Minutes',
                                         //     state: ToastState.Success);
-                                        var snackBar=SnackBar(content: Text( 'The task will End in : $remainingEndTimeFormat  '),
-                                          backgroundColor: Colors.green,);
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                        var snackBar = SnackBar(
+                                          content: Text(
+                                              'The task will End in : $remainingEndTimeFormat  '),
+                                          backgroundColor: Colors.green,
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
                                       }
                                     }).catchError((error) {
                                       FocusScope.of(context).unfocus();
@@ -662,7 +809,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                     ;
                                   },
                                   validator: (value) {
-                                    debugPrint(remainingMinutesInEndTime.toString());
+                                    debugPrint(
+                                        remainingMinutesInEndTime.toString());
                                     if (value.isEmpty) {
                                       return "End Time Can't be Empty";
                                     } else if (remainingDaysInEndTime! <= 0) {
@@ -677,13 +825,19 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                   borderColor: Colors.grey[200]!,
                                   backgroundColor: Colors.grey[200]!,
                                   type: TextInputType.text,
-                                  hint: TimeOfDay.now().format(context).toString(),
+                                  hint: TimeOfDay.now()
+                                      .format(context)
+                                      .toString(),
                                   control: endTimeController,
                                   suffix: Icons.timer,
-                                  suffixIconColor:
-                                  Theme.of(context).textTheme.subtitle1!.color,
-                                  textColor:
-                                  Theme.of(context).textTheme.subtitle1!.color!,
+                                  suffixIconColor: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .color,
+                                  textColor: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1!
+                                      .color!,
                                   isPassword: false,
                                 ),
                               ),
@@ -692,7 +846,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                         ),
                       ],
                     ),
-
                     const SizedBox(
                       height: 10,
                     ),
@@ -727,74 +880,71 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                         validator: (value) {
                           if (value == null) {
                             return "Reminder Can't be Empty";
-                          }
-                          else if (value == '1 day before' && remainingDaysInEndTime! <= 0) {
+                          } else if (value == '1 day before' &&
+                              remainingDaysInEndTime! <= 0) {
                             return 'invalid Reminder  $remainingDaysInEndTime Days ';
-                          }
-                          else if (value == '1 hour before' && remainingHoursInEndTime! <= 1) {
+                          } else if (value == '1 hour before' &&
+                              remainingHoursInEndTime! <= 1) {
                             return 'invalid Reminder $remainingHoursInEndTime Minutes';
-                          }
-                          else if (value == '30 min before' && remainingMinutesInEndTime! <= 30) {
+                          } else if (value == '30 min before' &&
+                              remainingMinutesInEndTime! <= 30) {
                             return 'invalid Reminder $remainingMinutesInEndTime Minutes';
-                          }
-                          else if (value == '10 min before' && remainingMinutesInEndTime! <= 10) {
+                          } else if (value == '10 min before' &&
+                              remainingMinutesInEndTime! <= 10) {
                             return 'invalid Reminder $remainingMinutesInEndTime Minutes';
-                          }
-                          else {
+                          } else {
                             reminder = value;
                             if (reminder == '30 min before') {
-                              remainingMinutesInEndTime = remainingMinutesInEndTime! - 30;
+                              remainingMinutesInEndTime =
+                                  remainingMinutesInEndTime! - 30;
                               debugPrint(
                                   '$remainingMinutesInEndTime   30 minuttttttttttttttttes reminder');
-                              finalEndDateTime=DateTime(
+                              finalEndDateTime = DateTime(
                                 endDateTime!.year,
                                 endDateTime!.month,
                                 endDateTime!.day,
                                 endTimeHours!,
-                                endTimeMinutes!-30,
+                                endTimeMinutes! - 30,
                               );
-
-                            }
-                            else if (reminder == '1 hour before') {
-                              remainingHoursInEndTime = remainingHoursInEndTime! - 1;
+                            } else if (reminder == '1 hour before') {
+                              remainingHoursInEndTime =
+                                  remainingHoursInEndTime! - 1;
                               debugPrint(
                                   '$remainingHoursInEndTime   1 hourrrrrrrrrrrrrs reminder');
-                              finalEndDateTime=DateTime(
+                              finalEndDateTime = DateTime(
                                 endDateTime!.year,
                                 endDateTime!.month,
                                 endDateTime!.day,
-                                endTimeHours!-1,
+                                endTimeHours! - 1,
                                 endTimeMinutes!,
                               );
-
                             } else if (reminder == '1 day before') {
-                              remainingDaysInEndTime = remainingDaysInEndTime! - 1;
+                              remainingDaysInEndTime =
+                                  remainingDaysInEndTime! - 1;
                               debugPrint(
                                   '$remainingDaysInEndTime   1 daaaaaaaaaaay reminder');
-                              finalEndDateTime=DateTime(
+                              finalEndDateTime = DateTime(
                                 endDateTime!.year,
                                 endDateTime!.month,
-                                endDateTime!.day-1,
+                                endDateTime!.day - 1,
                                 endTimeHours!,
                                 endTimeMinutes!,
                               );
-
                             } else if (reminder == '10 min before') {
-                              remainingMinutesInEndTime = remainingMinutesInEndTime! - 10;
+                              remainingMinutesInEndTime =
+                                  remainingMinutesInEndTime! - 10;
                               debugPrint(
                                   '$remainingMinutesInEndTime   10 minuttttttttttes reminder');
-                              finalEndDateTime=DateTime(
+                              finalEndDateTime = DateTime(
                                 endDateTime!.year,
                                 endDateTime!.month,
                                 endDateTime!.day,
                                 endTimeHours!,
-                                endTimeMinutes!-10,
+                                endTimeMinutes! - 10,
                               );
 
                               debugPrint(finalEndDateTime.toString());
-
-                            }
-                            else if(reminder=='none'){
+                            } else if (reminder == 'none') {
                               // finalTotalMinutes=finalTotalMinutes;
                               debugPrint('$finalTotalMinutesInEndTime   none');
                               debugPrint('$finalEndDateTime   none');
@@ -833,18 +983,18 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                         width: double.infinity,
                         onTap: () async {
                           if (formKey.currentState!.validate()) {
-                            await AppCubit.get(context).updateData(
-                                title: titleController.text,
-                                body: bodyController.text,
-                                startTime: startTimeController.text,
-                                endTime: endTimeController.text,
-                                reminder: reminder!,
-                                endDate: endDateController.text,
-                                startDate: startDateController.text,
-                                id: widget.editModel['id'],
-                                remainingMinutes: remainingMinutesInEndTime!,
-                                remainingHours: remainingHoursInEndTime!,
-                                remainingDays: remainingDaysInEndTime!);
+                            // await AppCubit.get(context).updateData(
+                            //     title: titleController.text,
+                            //     body: bodyController.text,
+                            //     startTime: startTimeController.text,
+                            //     endTime: endTimeController.text,
+                            //     reminder: reminder!,
+                            //     endDate: endDateController.text,
+                            //     startDate: startDateController.text,
+                            //     id: widget.editModel['id'],
+                            //     remainingMinutes: remainingMinutesInEndTime!,
+                            //     remainingHours: remainingHoursInEndTime!,
+                            //     remainingDays: remainingDaysInEndTime!);
 
                             // String  timeConvert(int time) {
                             //   remainingEndTimeFormat=((time/24/60 ).toInt().toString()+ "d:"+((time/60%24).toInt().round()).toString()+'h:' +
@@ -854,8 +1004,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             // }
                             // debugPrint(timeConvert(finalTotalMinutesInEndTime!));
 
-                            await service.deleteEndTimeNotifications(
-                                taskId: AppCubit.get(context).taskId!);
+                            // await service.deleteEndTimeNotifications(
+                            //     taskId: AppCubit.get(context).taskId!);
 
                             // await service.deleteStartTimeNotifications(
                             //     taskId: widget.editModel['id']);
@@ -863,38 +1013,38 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             //   // print('${totalMinutes}Total Minutes');
                             //   // print('${editTotalMinutes}Total Minutes');
                             // }
-                           debugPrint(finalEndDateTime.toString()+'Final End Date Time Laaaaaaaaast');
-                            await service.showScheduledNotificationsWithEndDate(
-                              title: 'Task Time Has been Finished',
-                              body:  titleController.text,
-                              id: AppCubit.get(context).taskId??1,
-                              payLoad: finalEndDateTime!.second.toString(),
-                              dateTime: finalEndDateTime!,
-                            );
+                            debugPrint(finalEndDateTime.toString() +
+                                'Final End Date Time Laaaaaaaaast');
+                            // await service.showScheduledNotificationsWithEndDate(
+                            //   title: 'Task Time Has been Finished',
+                            //   body: titleController.text,
+                            //   id: AppCubit.get(context).taskId ?? 1,
+                            //   payLoad: finalEndDateTime!.second.toString(),
+                            //   dateTime: finalEndDateTime!,
+                            // );
 
-                            if(finalStartDateTime!.isBefore(DateTime.now())==true){
-                              await service.showNotifications(
-                                  title: ' Task Has been Edit',
-                                  body: titleController.text,
-                                  payload: reminder!,
-                                  id: AppCubit.get(context).taskId??1);
-
-                            }
-                            else{
-                              await service.showScheduledNotificationsWithStartDate(
-                                title: ' Task Time Has been Started',
-                                body:  titleController.text,
-                                id: AppCubit.get(context).taskId??1,
-                                payLoad: finalEndDateTime!.second.toString(),
-                                dateTime: finalStartDateTime!,
-                              );
-                              await service.showNotifications(
-                                  title: 'Task Has been Edit',
-                                  body: titleController.text,
-                                  payload: reminder!,
-                                  id: AppCubit.get(context).taskId??1);
-
-                            }
+                            // if (finalStartDateTime!.isBefore(DateTime.now()) ==
+                            //     true) {
+                            //   await service.showNotifications(
+                            //       title: ' Task Has been Edit',
+                            //       body: titleController.text,
+                            //       payload: reminder!,
+                            //       id: AppCubit.get(context).taskId ?? 1);
+                            // } else {
+                            //   await service
+                            //       .showScheduledNotificationsWithStartDate(
+                            //     title: ' Task Time Has been Started',
+                            //     body: titleController.text,
+                            //     id: AppCubit.get(context).taskId ?? 1,
+                            //     payLoad: finalEndDateTime!.second.toString(),
+                            //     dateTime: finalStartDateTime!,
+                            //   );
+                            //   await service.showNotifications(
+                            //       title: 'Task Has been Edit',
+                            //       body: titleController.text,
+                            //       payload: reminder!,
+                            //       id: AppCubit.get(context).taskId ?? 1);
+                            // }
 
                             // await service.showScheduledNotificationsWithStartDate(
                             //   title: ' Task Time Has been Started',
@@ -903,7 +1053,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                             //   payLoad: finalEndDateTime!.second.toString(),
                             //   dateTime: finalStartDateTime!,
                             // );
-
 
                             // await service.showNotifications(
                             //     title: titleController.text,
@@ -948,13 +1097,13 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     );
   }
 
-  void listenToNotifications() =>
-      service.onNotificationClick.listen(onNotificationsListener);
-
-  void onNotificationsListener(String? payload) {
-    if (payload != null && payload.isNotEmpty) {
-      debugPrint("payLoad   $payload");
-      // navigateTo(context, widget:  ScheduleScreen());
-    }
-  }
+  // void listenToNotifications() =>
+  //     service.onNotificationClick.listen(onNotificationsListener);
+  //
+  // void onNotificationsListener(String? payload) {
+  //   if (payload != null && payload.isNotEmpty) {
+  //     debugPrint("payLoad   $payload");
+  //     // navigateTo(context, widget:  ScheduleScreen());
+  //   }
+  // }
 }

@@ -10,26 +10,44 @@ class MyTextFormField extends StatelessWidget {
   Function? onSubmit;
   Function? onChanged;
   Function()? onTap;
- late  bool isPassword = false;
-   String? label;
-   String? hint;
-   Widget? prefix;
+  late bool isPassword = false;
+  String? label;
+  String? hint;
+  Widget? prefix;
   IconData? suffix;
   Function()? suffixClicked;
   Color borderColor = Colors.limeAccent;
   Color labelColor = Colors.white;
   Color textColor = Colors.white;
   Color backgroundColor = Colors.blueGrey;
-  Color ?prefixIconColor = Colors.limeAccent;
-  Color ?suffixIconColor = Colors.limeAccent;
+  Color? prefixIconColor = Colors.limeAccent;
+  Color? suffixIconColor = Colors.limeAccent;
   String? textInputFormat;
 
-  MyTextFormField({Key? key,required this.readOnly, required this.control,
-    this.hint, required this.type,this.validator,this.onSubmit,this.onChanged,this.onTap
-    ,required this.isPassword, this.label,  this.prefix,this.suffix,this.suffixClicked,required this.borderColor,
-    required this.labelColor,required this.textColor,required this.backgroundColor,
-     this.prefixIconColor,this.textInputFormat,this.suffixIconColor,required this.enable
-  }) : super(key: key);
+  MyTextFormField(
+      {Key? key,
+      required this.readOnly,
+      required this.control,
+      this.hint,
+      required this.type,
+      this.validator,
+      this.onSubmit,
+      this.onChanged,
+      this.onTap,
+      required this.isPassword,
+      this.label,
+      this.prefix,
+      this.suffix,
+      this.suffixClicked,
+      required this.borderColor,
+      required this.labelColor,
+      required this.textColor,
+      required this.backgroundColor,
+      this.prefixIconColor,
+      this.textInputFormat,
+      this.suffixIconColor,
+      required this.enable})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -58,16 +76,18 @@ class MyTextFormField extends StatelessWidget {
         fillColor: backgroundColor.withOpacity(0.5),
         filled: true,
         labelText: label,
-        hintText:hint ,
+        hintText: hint,
         labelStyle: TextStyle(color: labelColor, fontSize: 14),
-
         prefixIcon: prefix,
         suffixIcon: suffix != null
             ? IconButton(
                 onPressed: () {
                   suffixClicked!();
                 },
-                icon: Icon(suffix,color:suffixIconColor ,),
+                icon: Icon(
+                  suffix,
+                  color: suffixIconColor,
+                ),
               )
             : null,
         enabledBorder: OutlineInputBorder(
@@ -82,7 +102,6 @@ class MyTextFormField extends StatelessWidget {
         errorBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.red, width: 2),
             borderRadius: BorderRadius.circular(5)),
-
       ),
     );
   }
